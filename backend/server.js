@@ -23,12 +23,13 @@ app.use('/api/orders', orderRoutes);
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
-// Serve the static frontend (public/)
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve the static frontend (../frontend)
+const frontendPath = path.join(__dirname, '..', 'frontend');
+app.use(express.static(frontendPath));
 
 // Fallback: send index.html for any non-API route (simple SPA-ish behavior)
 app.get(/^\/(?!api).*/, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
