@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
+const { seedIfEmpty } = require('./config/bootstrap');
 
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
@@ -32,7 +33,8 @@ app.get(/^\/(?!api).*/, (req, res) => {
 
 const PORT = process.env.PORT || 5000;
 
-connectDB().then(() => {
+connectDB().then(async () => {
+  await seedIfEmpty(); // ensures demo products + logins exist (esp. for in-memory DB)
   app.listen(PORT, () => {
     console.log(`\n🛒 E-commerce server running: http://localhost:${PORT}\n`);
   });
